@@ -12,7 +12,7 @@ var enemies = {
     // B, C y E substituirán a los valores por defecto definidos en la
     // variable baseParameters del constructor Enemy(). Ver
     // comentarios en el código del constructor al final del fichero.
-    basic: { x: 100, y: -50, sprite: 'enemy_purple', B: 100, C: 2 , E: 100 }
+    basic: { x: 100, y: -50, sprite: 'enemy_purple', B: 0, C: 2 , E: 100 }
 
 };
 
@@ -211,7 +211,7 @@ PlayerMissile.prototype.draw = function(ctx)  {
 
 var Enemy = function(blueprint,override) {
 
-    var baseParameters =  { A: 0, B: 0, C: 0, D: 0, 
+    var baseParameters =  { A: 10, B: 0, C: 0, D: 0, 
                             E: 0, F: 0, G: 0, H: 0 }
 
     // Cada instancia tendrá las propiedades definidas en baseParameters
