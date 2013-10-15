@@ -82,3 +82,57 @@ describe("enemySpec", function(){
 
 */
 
+	describe("Clase Enemy", function(){
+	
+		beforeEach(function(){
+			loadFixtures('index.html');
+		
+			canvas = $('#game')[0];
+			expect(canvas).toExist();
+
+			ctx = canvas.getContext('2d');
+			expect(ctx).toBeDefined();
+			
+			SpriteSheet = {
+				draw : function () {},
+				map : {enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 }}
+			}
+			
+		});
+	
+	
+		it("Enemy.draw()", function(){
+		
+			
+			E = new Enemy({ x: 100, y: -50, sprite: 'enemy_purple', B: 100, C: 2 , E: 100 });
+			
+			spyOn(SpriteSheet, "draw");
+		
+			E.draw(ctx);
+		
+			expect(SpriteSheet.draw).toHaveBeenCalled();
+			
+		});
+		
+		it("Enemy.step()", function(){
+		
+			Game = {width: 320, height: 480};
+			E = new Enemy({ x: 100, y: -50, sprite: 'enemy_purple', B: 100, C: 2 , E: 100 });
+			
+			var dt = 1
+			E.step(dt);
+		
+			expect(E.t).toEqual(1);
+			expect(E.vx).toEqual(E.A + E.B * Math.sin(E.C * E.t + E.D));
+			expect(E.vy).toEqual(E.E + E.F * Math.sin(E.G * E.t + E.H));
+			expect(E.x).toEqual(100 + E.vx * dt);
+			expect(E.y).toEqual(-50 + E.vy * dt);
+			
+		});
+
+		
+
+	});
+
+
+
