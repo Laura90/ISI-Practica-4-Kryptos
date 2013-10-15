@@ -22,9 +22,9 @@ var fireBall = function (){
     this.y = Game.height - 10 - this.
     this.w =  SpriteSheet.map['explosion'].w;
     this.h = Spritesheet.map['explosion'].h;
-    this.frame=2;
+    //this.frame=2;
     this.draw = function(ctx) {
-		SpriteSheet.draw(ctx,'ship',this.x,this.y,0);
+		SpriteSheet.draw(ctx,'explosion',this.x,this.y,2);
     }
     
 	

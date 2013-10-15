@@ -32,7 +32,7 @@ var Game = new function() {
     };
 
     // Gestión de la entrada (teclas para izda/derecha y disparo)
-    var KEY_CODES = { 37:'left', 39:'right', 32 :'fire' };
+    var KEY_CODES = { 37:'left', 39:'right', 32 :'fire', 22:'fireBall', 21:'fireBall' };//-------------------------------------
     this.keys = {};
 
     this.setupInput = function() {
