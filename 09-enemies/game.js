@@ -17,18 +17,7 @@ var enemies = {
 
 };
 
-var fireBall = function (){
-	this.x = Game.width/2 - this.w / 2;
-    this.y = Game.height - 10 - this.
-    this.w =  SpriteSheet.map['explosion'].w;
-    this.h = Spritesheet.map['explosion'].h;
-    //this.frame=2;
-    this.draw = function(ctx) {
-		SpriteSheet.draw(ctx,'explosion',this.x,this.y,2);
-    }
-    
-	
-};
+
 var startGame = function() {
     Game.setBoard(0,new Starfield(20,0.4,100,true))
     Game.setBoard(1,new Starfield(50,0.6,100))
@@ -170,6 +159,26 @@ var PlayerShip = function() {
 	    this.board.add(new PlayerMissile(this.x,this.y+this.h/2));
 	    this.board.add(new PlayerMissile(this.x+this.w,this.y+this.h/2));
 	}
+	if(Game.keys['leftFireBall'] && this.reload < 0) {
+		 up = false;
+	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+	    Game.keys['leftFireball'] = false;
+	    
+	    this.reload = this.reloadTime;
+
+	    // Se añaden al gameboard 2 misiles 
+	    this.board.add(new FireBall(this.x + this.w/2,this.y+this.h/2,1));
+	}
+	if(Game.keys['rightFireBall'] && this.reload < 0) {
+		 up = false;
+	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+	    Game.keys['leftFireball'] = false;
+	    
+	    this.reload = this.reloadTime;
+
+	    // Se añaden al gameboard 2 misiles 
+	    this.board.add(new FireBall(this.x + this.w/2,this.y+this.h/2,-1));
+	}
     }
 
     this.draw = function(ctx) {
@@ -197,6 +206,31 @@ PlayerMissile.prototype.step = function(dt)  {
 
 PlayerMissile.prototype.draw = function(ctx)  {
     SpriteSheet.draw(ctx,'missile',this.x,this.y);
+};
+
+// lado debe ser 1 si se pulsa B y -1 si se pulsa N
+var FireBall = function (x,y, lado){
+	this.w = SpriteSheet.map['explosion'].w;
+    this.h = SpriteSheet.map['explosion'].h;
+	this.x = x - this.w/2; 
+    this.y = y - this.h; 
+    this.vx = -200 * lado;
+	
+};
+
+FireBall.prototype.step = function(dt)  {
+	this.x += this.vx * dt;
+    this.y += -200 * dt
+    if(this.y > Game.height || 
+       this.y < -this.h||
+       this.x < -this.w||
+       this.x > Game.width) {
+	this.board.remove(this);
+    }
+};
+
+FireBall.prototype.draw = function(ctx)  {
+    SpriteSheet.draw(ctx,'explosion',this.x,this.y,2);
 };
 
 
@@ -296,6 +330,8 @@ Enemy.prototype.step = function(dt) {
 Enemy.prototype.draw = function(ctx) {
     SpriteSheet.draw(ctx,this.sprite,this.x,this.y);
 }
+
+
 
 
 
