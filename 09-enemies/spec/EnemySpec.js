@@ -1,3 +1,24 @@
+describe("enemySpec", function(){
+
+	var canvas, ctx;
+	
+	beforeEach(function(){
+		loadFixtures('index.html');
+		
+		canvas = $('#game')[0];
+		expect(canvas).toExist();
+
+		ctx = canvas.getContext('2d');
+		expect(ctx).toBeDefined();
+		
+		newboard = new GameBoard();
+	});
+	
+	it ("enemy.step()",function(){
+		
+	}
+
+
 /*
 
   Requisitos:
