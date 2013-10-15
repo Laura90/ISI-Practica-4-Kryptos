@@ -107,6 +107,60 @@ describe("Clase PlayerShip", function(){
 
 
     });
+    
+    
+    it("step con tecla fire pulsada", function(){
+	
+
+	SpriteSheet = {
+			map : {ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
+					missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 }}
+		}
+	
+	Game = {width: 320, height: 480, keys: {'fire': false}};
+
+	var miNave = new PlayerShip();
+
+
+	var theboard = function () {
+		this.contador = 0;
+		this.add = function () { this.contador = this.contador + 1 }
+	}
+	
+	
+	// Sin pulsar disparo, no debe disparar
+	miNave.board = new theboard();
+	var dt = 1;
+	miNave.step(dt)
+	expect(miNave.board.contador).toEqual(0)
+	
+	// Tras mantener pulsado espacio, debe disparar solo 2 misiles
+	miNave.board = new theboard();
+	Game = {width: 320, height: 480, keys: {'fire': true}};
+	miNave.step(dt)
+	miNave.step(dt)
+	miNave.step(dt)
+	expect(miNave.board.contador).toEqual(2);
+	
+	//Suelto espacio, no debe disparar
+	miNave.board = new theboard();
+	Game = {width: 320, height: 480, keys: {'fire': false}};
+	miNave.step(dt)
+	expect(miNave.board.contador).toEqual(0);
+	
+	// Disparo a rafagas
+	miNave.board = new theboard();
+	Game = {width: 320, height: 480, keys: {'fire': true}}; // pulso disparo
+	miNave.step(dt)
+	expect(miNave.board.contador).toEqual(2); // 2 misiles disparados
+	Game = {width: 320, height: 480, keys: {'fire': false}}; // suelto disparo
+	miNave.step(dt)
+	expect(miNave.board.contador).toEqual(2); // Sigue habiendo 2 misiles disparados
+	Game = {width: 320, height: 480, keys: {'fire': true}}; // pulso disparo
+	miNave.step(dt)
+	expect(miNave.board.contador).toEqual(4); // En total, 4 misiles disparados
+
+    });
 
 
 
