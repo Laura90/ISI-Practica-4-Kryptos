@@ -4,7 +4,8 @@ var sprites = {
     enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
     enemy_bee: { sx: 79, sy: 0, w: 37, h: 43, frames: 1 },
     enemy_ship: { sx: 116, sy: 0, w: 42, h: 43, frames: 1 },
-    enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 }
+    enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
+    explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 }
 };
 
 
@@ -16,7 +17,18 @@ var enemies = {
 
 };
 
-
+var fireBall = function (){
+	this.x = Game.width/2 - this.w / 2;
+    this.y = Game.height - 10 - this.
+    this.w =  SpriteSheet.map['explosion'].w;
+    this.h = Spritesheet.map['explosion'].h;
+    this.frame=2;
+    this.draw = function(ctx) {
+		SpriteSheet.draw(ctx,'ship',this.x,this.y,0);
+    }
+    
+	
+};
 var startGame = function() {
     Game.setBoard(0,new Starfield(20,0.4,100,true))
     Game.setBoard(1,new Starfield(50,0.6,100))
