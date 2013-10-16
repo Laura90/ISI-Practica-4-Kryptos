@@ -1,5 +1,5 @@
 
-describe("Clase Fireball", function(){
+describe("class FireBall", function(){
 	
 		beforeEach(function(){
 			loadFixtures('index.html');
@@ -8,6 +8,7 @@ describe("Clase Fireball", function(){
 			expect(canvas).toExist();
 
 			ctx = canvas.getContext('2d');
+
 			expect(ctx).toBeDefined();
 			
 			SpriteSheet = {
@@ -19,8 +20,6 @@ describe("Clase Fireball", function(){
 
 
 it("Fireball.step()", function(){
-		
-		
 		
 		
 		fire1 = new FireBall(200,420,1);
@@ -54,4 +53,25 @@ it("Fireball.step()", function(){
 		
 			
 		});
+
+	it("fireBall.draw()",function() {	
+	
+		ball= new FireBall(10,10);
+		
+		spyOn(SpriteSheet, "draw");
+		
+		ball.draw(ctx)
+		
+		expect(SpriteSheet.draw).toHaveBeenCalled();
+		expect(SpriteSheet.draw.calls[0].args[0]).toEqual(ctx);
+		expect(SpriteSheet.draw.calls[0].args[1]).toEqual("fireball");
+ 		expect(SpriteSheet.draw.calls[0].args[2]).toEqual(ball.x);
+ 		expect(SpriteSheet.draw.calls[0].args[3]).toEqual(ball.y);
+	
+	});
+	
+
+
+
+
 });
