@@ -219,24 +219,15 @@ var FireBall = function (x,y, lado){
     this.h = SpriteSheet.map['fireball'].h;
 	this.x = x - this.w/2; 
     this.y = y - this.h; 
-    this.vx = -150 * lado;
-    this.fy = 100;
-    this.bajada = false
-	
+    this.vx = -100 * lado;
+    this.vy = -850;
 };
 
 FireBall.prototype.step = function(dt)  {
 	 this.x += this.vx * dt;
+	 this.y += this.vy * dt;
+	 this.vy += 50;
 	 
-	 if (this.y < this.fy +50){
-    	this.bajada = true
-    }
-    
-    if (this.bajada) {
-    	this.y += 5*(this.y - this.fy)*dt
-    } else {
-    	this.y -= 5*(this.y - this.fy)*dt
-    }
     if(this.y > Game.height || 
        this.y < -this.h||
        this.x < -this.w||
