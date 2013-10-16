@@ -197,7 +197,7 @@ describe("Clase PlayerShip", function(){
 		expect(miNave.board.contador).toEqual(0);
     
     
-    };
+    });
     
         it("step con tecla rightFireBall pulsada", function(){
     
@@ -234,7 +234,7 @@ describe("Clase PlayerShip", function(){
 		expect(miNave.board.contador).toEqual(0);
     
     
-    };
+    });
 
 
 
