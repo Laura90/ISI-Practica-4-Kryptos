@@ -161,6 +161,80 @@ describe("Clase PlayerShip", function(){
 	expect(miNave.board.contador).toEqual(4); // En total, 4 misiles disparados
 
     });
+    
+    it("step con tecla leftFireBall pulsada", function(){
+    
+    	SpriteSheet = {
+			map : {ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
+				  fireball: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 }}
+		}
+    	Game = {width: 320, height: 480, keys: {'leftFireBall': false}};
+
+		var miNave = new PlayerShip();
+
+    	var theboard = function () {
+			this.contador = 0;
+			this.add = function () { this.contador = this.contador + 1 }
+		}
+		// Sin pulsar disparo, no debe disparar
+		miNave.board = new theboard();
+		var dt = 1;
+		miNave.step(dt)
+		expect(miNave.board.contador).toEqual(0)
+	
+		// Tras mantener pulsado tecla leftfireball, debe disparar una bola de fuego
+		miNave.board = new theboard();
+		Game = {width: 320, height: 480, keys: {'leftFireBall': true}};
+		miNave.step(dt)
+		miNave.step(dt)
+		//miNave.step(dt)
+		expect(miNave.board.contador).toEqual(1);
+	
+		//Suelto espacio, no debe disparar
+		miNave.board = new theboard();
+		Game = {width: 320, height: 480, keys: {'leftFireBall': false}};
+		miNave.step(dt)
+		expect(miNave.board.contador).toEqual(0);
+    
+    
+    };
+    
+        it("step con tecla rightFireBall pulsada", function(){
+    
+    	SpriteSheet = {
+			map : {ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
+				  fireball: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 }}
+		}
+    	Game = {width: 320, height: 480, keys: {'rightFireBall': false}};
+
+		var miNave = new PlayerShip();
+
+    	var theboard = function () {
+			this.contador = 0;
+			this.add = function () { this.contador = this.contador + 1 }
+		}
+		// Sin pulsar disparo, no debe disparar
+		miNave.board = new theboard();
+		var dt = 1;
+		miNave.step(dt)
+		expect(miNave.board.contador).toEqual(0)
+	
+		// Tras mantener pulsado tecla leftfireball, debe disparar una bola de fuego
+		miNave.board = new theboard();
+		Game = {width: 320, height: 480, keys: {'rightFireBall': true}};
+		miNave.step(dt)
+		miNave.step(dt)
+		//miNave.step(dt)
+		expect(miNave.board.contador).toEqual(1);
+	
+		//Suelto espacio, no debe disparar
+		miNave.board = new theboard();
+		Game = {width: 320, height: 480, keys: {'rightFireBall': false}};
+		miNave.step(dt)
+		expect(miNave.board.contador).toEqual(0);
+    
+    
+    };
 
 
 

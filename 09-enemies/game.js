@@ -215,9 +215,9 @@ PlayerMissile.prototype.draw = function(ctx)  {
 
 // lado debe ser 1 si se pulsa B y -1 si se pulsa N
 var FireBall = function (x,y, lado){
-	 this.w = SpriteSheet.map['fireball'].w;
+	this.w = SpriteSheet.map['fireball'].w;
     this.h = SpriteSheet.map['fireball'].h;
-	 this.x = x - this.w/2; 
+	this.x = x - this.w/2; 
     this.y = y - this.h; 
     this.vx = -150 * lado;
     this.fy = 100;
