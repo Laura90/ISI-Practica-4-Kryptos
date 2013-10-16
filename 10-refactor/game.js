@@ -1,7 +1,12 @@
 var sprites = {
     ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
     missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 },
-    enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 }
+    enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
+    enemy_bee: { sx: 79, sy: 0, w: 37, h: 43, frames: 1 },
+    enemy_ship: { sx: 116, sy: 0, w: 42, h: 43, frames: 1 },
+    enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
+    explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
+    fireball: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 }
 };
 
 var enemies = {
@@ -167,6 +172,41 @@ PlayerMissile.prototype.step = function(dt)  {
     if(this.y < -this.h) { this.board.remove(this); }
 };
 
+	// lado debe ser 1 si se pulsa B y -1 si se pulsa N
+	var FireBall = function (x,y, lado){
+		this.w = SpriteSheet.map['fireball'].w;
+		this.h = SpriteSheet.map['fireball'].h;
+		this.x = x - this.w/2; 
+		this.y = y - this.h; 
+		this.vx = -150 * lado;
+		this.fy = 100;
+		this.bajada = false
+	
+	};
+
+	FireBall.prototype.step = function(dt)  {
+		 this.x += this.vx * dt;
+		 
+		 if (this.y < this.fy +50){
+			this.bajada = true
+		}
+		
+		if (this.bajada) {
+			this.y += 5*(this.y - this.fy)*dt
+		} else {
+			this.y -= 5*(this.y - this.fy)*dt
+		}
+		if(this.y > Game.height || 
+		   this.y < -this.h||
+		   this.x < -this.w||
+		   this.x > Game.width) {
+		this.board.remove(this);
+		}
+	};
+
+	FireBall.prototype.draw = function(ctx)  {
+    	SpriteSheet.draw(ctx,'fireball',this.x,this.y,2);
+	};
 
 
 // Constructor para las naves enemigas. Un enemigo se define mediante
