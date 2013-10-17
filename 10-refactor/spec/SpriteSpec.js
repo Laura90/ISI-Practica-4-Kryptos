@@ -1,6 +1,8 @@
-describe("class SpriteShip",function(){
 
-	beforeEach(function(){
+describe("class Sprite", function(){
+	
+		beforeEach(function(){
+
 			loadFixtures('index.html');
 		
 			canvas = $('#game')[0];
@@ -10,6 +12,13 @@ describe("class SpriteShip",function(){
 
 			expect(ctx).toBeDefined();
 			
+		SpriteSheet = {
+				draw : function () {},
+				map : {fireball: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 }}
+			}
+			
+	
+
 		
 		});
 
@@ -20,10 +29,8 @@ describe("class SpriteShip",function(){
 		var s= new Sprite();
 		
 		
-		SpriteSheet.draw = function(){};
-		s.sprite ="fireball";
 		spyOn(SpriteSheet, "draw");
-		
+		s.sprite="fireball";
 		s.draw(ctx);
 		
 		expect(SpriteSheet.draw).toHaveBeenCalled();
@@ -45,15 +52,31 @@ describe("class SpriteShip",function(){
 		
 		expect(s.vx).toBe(-100);
 	
-	
-	
-	
-	
-	
-	
-	
 	});
 
 
 
+
+		
+
+	it("Sprite.step()", function(){
+		
+		var obj = new Sprite();
+		
+		spyOn(obj, "merge");
+		obj.setup('fireball', {vx: -100})
+		
+		expect(obj.sprite).toBe("fireball");
+		expect(obj.merge).toHaveBeenCalled();
+		expect(obj.w).toBe(64);
+		expect(obj.h).toBe(64);
+		expect(obj.frame).toBe(0);
+		
+  		
+	});
+ 		
+		
+			
 });
+
+
