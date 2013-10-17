@@ -5,7 +5,8 @@ var sprites = {
     enemy_bee: { sx: 79, sy: 0, w: 37, h: 43, frames: 1 },
     enemy_ship: { sx: 116, sy: 0, w: 42, h: 43, frames: 1 },
     enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
-    explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 }
+    explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
+    fireball: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 }
 };
 
 
@@ -122,6 +123,9 @@ var Starfield = function(speed,opacity,numStars,clear) {
 // La clase PlayerShip tambien ofrece la interfaz step(), draw() para
 // poder ser dibujada desde el bucle principal del juego
 var PlayerShip = function() { 
+	 var up = false;
+	 var up2 = false;
+	 var up3 = false;
     this.setup('ship', { vx: 0, frame: 0, reloadTime: 0.25, maxVel: 200 });
 
     this.reload = this.reloadTime;
@@ -141,14 +145,39 @@ var PlayerShip = function() {
 	}
 
 	this.reload-=dt;
-	if(Game.keys['fire'] && this.reload < 0) {
+	if(!Game.keys['fire']) up = true;
+	if(!Game.keys['leftFireBall']) up2 = true;
+	if(!Game.keys['rightFireBall']) up3 = true;
+	if(up && Game.keys['fire'] && this.reload < 0) {
+		 up = false;
 	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
-	    Game.keys['fire'] = false;
+	    //Game.keys['fire'] = false;
+	    
 	    this.reload = this.reloadTime;
 
 	    // Se añaden al gameboard 2 misiles 
 	    this.board.add(new PlayerMissile(this.x,this.y+this.h/2));
 	    this.board.add(new PlayerMissile(this.x+this.w,this.y+this.h/2));
+	}
+	if(up2 && Game.keys['leftFireBall'] && this.reload < 0) {
+		 up2 = false;
+	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+	    //Game.keys['leftFireball'] = false;
+	    
+	    this.reload = this.reloadTime;
+
+	    // Se añaden al gameboard 2 misiles 
+	    this.board.add(new FireBall(this.x + this.w/2,this.y+this.h/2,1));
+	}
+	if(up3 && Game.keys['rightFireBall'] && this.reload < 0) {
+		 up3 = false;
+	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+	    //Game.keys['leftFireball'] = false;
+	    
+	    this.reload = this.reloadTime;
+
+	    // Se añaden al gameboard 2 misiles 
+	    this.board.add(new FireBall(this.x + this.w/2,this.y+this.h/2,-1));
 	}
     }
 }
@@ -183,6 +212,34 @@ PlayerMissile.prototype.step = function(dt)  {
     }
 };
 
+
+// lado debe ser 1 si se pulsa B y -1 si se pulsa N
+var FireBall = function (x,y, lado){
+	this.setup('fireball', {vx: -100*lado, vy: -850})
+	this.x = x - this.w/2; 
+   this.y = y - this.h; 
+
+};
+
+FireBall.prototype = new Sprite();
+PlayerMissile.prototype.type = OBJECT_PLAYER_PROJECTILE;
+
+FireBall.prototype.step = function(dt)  {
+	 this.x += this.vx * dt;
+	 this.y += this.vy * dt;
+	 this.vy += 50;
+	 
+	 var collision = this.board.collide(this,OBJECT_ENEMY);
+    if(collision) {
+	collision.hit(this.damage);
+	this.board.remove(this);
+    } else if(this.y > Game.height || 
+       this.y < -this.h||
+       this.x < -this.w||
+       this.x > Game.width) {
+	this.board.remove(this);
+    }
+};
 
 
 
