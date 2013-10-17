@@ -215,7 +215,7 @@ PlayerMissile.prototype.step = function(dt)  {
 
 // lado debe ser 1 si se pulsa B y -1 si se pulsa N
 var FireBall = function (x,y, lado){
-	this.setup('fireball', {vx: -100*lado, vy: -850, damage: 10,frame:3})
+	this.setup('fireball', {vx: -100*lado, vy: -850, damage: 100,frame:3})
 	this.x = x - this.w/2; 
    this.y = y - this.h; 
 
@@ -232,7 +232,7 @@ FireBall.prototype.step = function(dt)  {
 	 var collision = this.board.collide(this,OBJECT_ENEMY);
     if(collision) {
 	collision.hit(this.damage);
-	this.board.remove(this);
+	
     } else if(this.y > Game.height || 
        this.y < -this.h||
        this.x < -this.w||
