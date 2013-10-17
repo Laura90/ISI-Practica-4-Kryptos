@@ -12,112 +12,106 @@ describe("collisionSpec",function(){
 			
 			SpriteSheet = {
 				draw : function () {},
-				map : {ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
+				map : {
+					ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
     				missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 },
     				enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
-    				enemy_bee: { sx: 79, sy: 0, w: 37, h: 43, frames: 1 },
-    				enemy_ship: { sx: 116, sy: 0, w: 42, h: 43, frames: 1 },
-    				enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
     				explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
-    				fireball: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 }}
+    				fireball: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 }
+    			}
 			}	
 			newboard = new GameBoard();
 	});
 	
-	it("misil nave contra enemiga",function(){
+	it("Misil vs Enemy",function(){
 			
-			var misil= new PlayerMissile(100,-100);
-			misil.x=100;
-			misil.y=-100;
-			misil.damage = 10;
-			var enemigo = new Enemy(enemies.basic);
-			enemigo.x=100;
-			enemigo.y=-100;
+		var misil = new PlayerMissile(100,100);
 		
-			newboard.add(misil);
-			newboard.add(enemigo);
-			newboard.step(0.000000001);
-			
-			var collision =newboard.collide(misil,OBJECT_ENEMY);
-			
-			expect(collision).toBe(enemigo);
-			expect(newboard.objects.length).toBe(1);
-	});
-	
-	it("bola fuego contra enemigo", function(){
-		var ballfire = new FireBall(100,-100,1);
-		ballfire.x=100;
-		ballfire.y=-100;
-		var enemigo = new Enemy(enemies.basic);
-		enemigo.x=100;
-		enemigo.y=-100;
-		
-		newboard.add(ballfire);
-		newboard.add(enemigo);
-		newboard.step(0.000000001);
-			
-		var collision =newboard.collide(ballfire,OBJECT_ENEMY);
-			
-		//expect(collision).toBe(enemigo);
-		
-	});
-	
-	/*
-	it("nave enemiga contra ship",function(){
-	
-		var mship= new PlayerShip();
-		mship.x=100;
-		mship.y=-100;
-		mship.vx=0;
-		
-		var enemigo = new Enemy(enemies.basic);
-		enemigo.x=100;
-		enemigo.y=-100;
-	
-		newboard.add(mship);
-		newboard.add(enemigo);
-		newboard.step(0.000000001);
-			
-		var collision =newboard.collide(mship,OBJECT_ENEMY);
-			
-		expect(collision).toBe(enemigo);
-	
-	});*/
-	
-	it("misil que no destruye nave",function(){
-	
-		var misil= new PlayerMissile(100,-100);
-		misil.x=100;
-		misil.y=-100;
-		misil.damage = 5;
-		var enemigo = new Enemy(enemies.basic);
-		enemigo.x=100;
-		enemigo.y=-100;
-		enemigo.health=10;
+		var enemigo = new Enemy({x: 99, y: 90, sprite: 'enemy_purple', health: 10 });
 		
 		newboard.add(misil);
 		newboard.add(enemigo);
-		newboard.step(0.000000001);
 		
-		var collision =newboard.collide(misil,OBJECT_ENEMY);
+		var collision = newboard.collide(misil,OBJECT_ENEMY);
+		
+		newboard.step(0.01);
 			
 		expect(collision).toBe(enemigo);
-		expect(enemigo.health).toBe(5);
+		expect(newboard.objects.length).toBe(1);
+		expect(newboard.objects[0].sprite).toBe('explosion');
+	});
+	
+	
+	it("Misil hits Enemy ",function(){
+	
+		var misil= new PlayerMissile(100,100);
+
+		var enemigo = new Enemy({ x: 99, y: 90, sprite: 'enemy_purple', health: 20 });
+
 		
+		newboard.add(misil);
+		newboard.add(enemigo);
+
+		
+		var collision =newboard.collide(misil,OBJECT_ENEMY);
+		
+		newboard.step(0.01);
+		
+		expect(collision).toBe(enemigo);
+		expect(enemigo.health).toBe(10);
+		expect(newboard.objects.length).toBe(1);
 		
 	});
+	
+	
+	it("FireBall vs Enemy", function(){
+	
+		var ballfire = new FireBall(200,200,1);
+
+		var enemigo = new Enemy({x: 168, y: 136, sprite: 'enemy_purple', health: 10 });
+
+		
+		newboard.add(ballfire);
+		newboard.add(enemigo);
+		
+		var collision =newboard.collide(ballfire,OBJECT_ENEMY);
+		
+		newboard.step(0.01);
+		
+		expect(collision).toBe(enemigo);
+		expect(newboard.objects.length).toBe(2);
+		expect(newboard.objects[0].sprite).toBe('fireball');
+		expect(newboard.objects[1].sprite).toBe('explosion');
+		
+	});
+	
+	
+	it("PlayerShip vs Enemy",function(){
+	
+		Game.keys = false;
+	
+		var mship= new PlayerShip();
+
+		
+		var enemigo = new Enemy({ x: 141.5, y: 428, sprite: 'enemy_purple', health: 20 });
+
+	
+		newboard.add(mship);
+		newboard.add(enemigo);
+			
+		var collision = newboard.collide(mship,OBJECT_ENEMY);
+			
+		newboard.step(0.01);
+		
+		expect(collision).toBe(enemigo);
+		expect(newboard.objects.length).toBe(1);
+		expect(newboard.objects[0].sprite).toBe('explosion');
+	
+	});
+	
+
 
 });
-
-
-
-
-
-
-
-
-
-
 
 
 
