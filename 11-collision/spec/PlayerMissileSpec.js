@@ -70,24 +70,29 @@ describe("Clase PlayerMissile", function(){
 	
 		m = new PlayerMissile(10,90);
 		m2 = new PlayerMissile(10,20);
-
-		var dummyBoard = {
+  		
+  		m.board = {
+  			collide: function(obj) {}
+  		};
+  		m2.board = {
   			remove: function(obj) {},
   			collide: function(obj) {}
   		};
   		
-  		m.board = dummyBoard;
-  		m2.board = dummyBoard;
+  		spyOn(m.board, "collide");
+  		spyOn(m2.board, "collide");
   		
 		var dt = 0.1
 		m.step(dt)
 		
 		expect(m.y).toEqual(90 - 10 + m.vy * dt);
+		expect(m.board.collide).toHaveBeenCalled();
 		
   		spyOn(m2.board, "remove")
   		
 		m2.step(dt)
 		expect(m2.board.remove).toHaveBeenCalled();
+		expect(m2.board.collide).toHaveBeenCalled();
  		
 		
 

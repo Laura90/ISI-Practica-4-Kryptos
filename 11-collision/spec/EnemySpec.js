@@ -98,7 +98,7 @@
 			Game = {width: 320, height: 480};
 			E = new Enemy({ x: 100, y: -50, sprite: 'enemy_purple', B: 100, C: 2 , E: 100 });
 			E.board = {remove: function () {}, collide: function(obj) {}}
-			
+			spyOn(E.board, "collide");
 			var dt = 1
 			E.step(dt);
 		
@@ -107,12 +107,15 @@
 			expect(E.vy).toEqual(E.E + E.F * Math.sin(E.G * E.t + E.H));
 			expect(E.x).toEqual(100 + E.vx * dt);
 			expect(E.y).toEqual(-50 + E.vy * dt);
+			expect(E.board.collide).toHaveBeenCalled()
 			
 			E2 = new Enemy({ x: 100, y: 500, sprite: 'enemy_purple', B: 100, C: 2 , E: 100 });
 			E2.board = {remove: function () {}, collide: function(obj) {}}
 			spyOn(E2.board, "remove");
+			spyOn(E2.board, "collide");
 			E2.step(dt);
 			expect(E2.board.remove).toHaveBeenCalled()
+			expect(E2.board.collide).toHaveBeenCalled()
 			
 			
 		});
