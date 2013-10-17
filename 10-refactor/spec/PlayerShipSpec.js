@@ -164,13 +164,13 @@ describe("Clase PlayerShip", function(){
     
     it("step con tecla leftFireBall pulsada", function(){
     
-		SpriteSheet = {
-			map : {ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
-            fireball: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 }}
-        }
-        Game = {width: 320, height: 480, keys: {'leftFireBall': false}};
+            SpriteSheet = {
+                        map : {ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
+                                 fireball: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 }}
+                }
+            Game = {width: 320, height: 480, keys: {'leftFireBall': false}};
 
-        var miNave = new PlayerShip();
+                var miNave = new PlayerShip();
 
             var theboard = function () {
                         this.contador = 0;
@@ -239,5 +239,6 @@ describe("Clase PlayerShip", function(){
 
 
 });
+
 
 
