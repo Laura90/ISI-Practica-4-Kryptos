@@ -202,13 +202,16 @@ PlayerMissile.prototype.step = function(dt)  {
 
 // lado debe ser 1 si se pulsa B y -1 si se pulsa N
 var FireBall = function (x,y, lado){
-	this.w = SpriteSheet.map['fireball'].w;
-    this.h = SpriteSheet.map['fireball'].h;
+	this.setup('fireball', {vx: -100*lado, vy: -850})
+	//this.w = SpriteSheet.map['fireball'].w;
+    //this.h = SpriteSheet.map['fireball'].h;
 	this.x = x - this.w/2; 
     this.y = y - this.h; 
-    this.vx = -100 * lado;
-    this.vy = -850;
+    //this.vx = -100 * lado;
+    //this.vy = -850;
 };
+
+FireBall.prototype = new Sprite();
 
 FireBall.prototype.step = function(dt)  {
 	 this.x += this.vx * dt;
@@ -223,9 +226,11 @@ FireBall.prototype.step = function(dt)  {
     }
 };
 
-FireBall.prototype.draw = function(ctx)  {
-    SpriteSheet.draw(ctx,'fireball',this.x,this.y,2);
-};
+
+
+//FireBall.prototype.draw = function(ctx)  {
+//    SpriteSheet.draw(ctx,'fireball',this.x,this.y,2);
+//};
 
 
 // Constructor para las naves enemigas. Un enemigo se define mediante
