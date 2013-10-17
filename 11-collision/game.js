@@ -205,10 +205,10 @@ PlayerMissile.prototype.step = function(dt)  {
     this.y += this.vy * dt;
     var collision = this.board.collide(this,OBJECT_ENEMY);
     if(collision) {
-	collision.hit(this.damage);
-	this.board.remove(this);
+		collision.hit(this.damage);
+		this.board.remove(this);
     } else if(this.y < -this.h) { 
-	this.board.remove(this); 
+		this.board.remove(this); 
     }
 };
 
