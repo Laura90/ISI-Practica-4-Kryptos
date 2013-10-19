@@ -40,3 +40,180 @@ Especificación: GameBoard debe
 
 
 */
+
+describe("Clase GameBoard", function(){
+
+	var canvas, ctx;
+	
+	beforeEach(function(){
+		loadFixtures('index.html');
+		
+		canvas = $('#game')[0];
+		expect(canvas).toExist();
+
+		ctx = canvas.getContext('2d');
+		expect(ctx).toBeDefined();
+		
+		newboard = new GameBoard();
+	});
+
+
+
+
+	it("GameBoard.Add()", function(){
+		
+		var dummy = function () {}
+		d = new dummy();
+		newboard.add(d);
+		expect(newboard.objects.length).toEqual(1);
+		
+
+
+	});
+	
+	it("Remove from objects", function(){
+		
+		var dummy = function () {}
+		
+		d = new dummy();
+		d2 = new dummy();
+		
+		newboard.add(d);
+		newboard.add(d2);
+		
+		expect(newboard.objects.length).toEqual(2);
+		
+		newboard.resetRemoved();
+		newboard.remove(d);
+		newboard.finalizeRemoved();
+		
+		expect(newboard.objects.length).toEqual(1);
+		expect(newboard.objects[0]).toEqual(d2);
+
+	});
+	
+
+	it("GameBoard.draw()", function(){
+		
+		var dummy = function () {
+			this.draw = function (){}
+		}
+		
+		d = new dummy();
+		d2 = new dummy();
+		
+		newboard.add(d);
+		newboard.add(d2);
+		
+		spyOn(d, "draw");
+		spyOn(d2, "draw");
+		
+		newboard.draw(ctx);
+		
+		expect(d.draw).toHaveBeenCalled();
+		expect(d2.draw).toHaveBeenCalled();
+		
+
+	});
+	
+	it("GameBoard.step()", function(){
+		
+		var dummy = function () {
+			this.step = function (){}
+		}
+		
+		d = new dummy();
+		d2 = new dummy();
+		
+		newboard.add(d);
+		newboard.add(d2);
+		
+		spyOn(d, "step");
+		spyOn(d2, "step");
+		
+		var dt = 1;
+		newboard.step(dt);
+		
+		expect(d.step).toHaveBeenCalled();
+		expect(d2.step).toHaveBeenCalled();
+
+
+	});
+	
+	it("GameBoard.collide()", function(){
+		
+		var missile = function () {
+			this.x =140
+			this.y =428
+			this.h = 40
+			this.w = 40
+		}
+		
+		misil = new missile();
+		misil2 = new missile();
+		
+		newboard.add(misil);
+		newboard.add(misil2);
+		
+		expect(newboard.collide(misil)).toEqual(misil2);
+		
+
+	});
+	
+	it("GameBoard.iterate()", function(){
+		
+		var dummy = function () {
+			this.f = function () {}
+		}
+		var dummy1 = new dummy();
+		var dummy2 = new dummy();
+		newboard.add(dummy1);
+		newboard.add(dummy2);
+		
+		spyOn(dummy2, "f");
+		spyOn(dummy1, "f");
+		
+		newboard.iterate("f")
+		expect(dummy1.f).toHaveBeenCalled();
+		expect(dummy2.f).toHaveBeenCalled();
+		
+	});
+
+	it("GameBoard.overlap()", function(){
+		
+		var ojt = function (x,y,h,w) {
+			this.x = x
+			this.y = y
+			this.h = h
+			this.w = w
+		}
+		var dummy1 = new ojt(10,10,10,10);
+		var dummy2 = new ojt(15,15,15,15);
+		var dummy3 = new ojt(30,30,15,15);
+
+		expect(newboard.overlap(dummy1,dummy2)).toEqual(true);
+		expect(newboard.overlap(dummy1,dummy3)).toEqual(false);
+		
+	});
+
+	it("GameBoard.detect()", function(){
+		
+		var dummy = function () {}
+		
+		var dummy1 = new dummy();
+		var dummy2 = new dummy();
+		
+		newboard.add(dummy1);
+		newboard.add(dummy2);
+		
+		expect(newboard.detect(function() {return true})).toEqual(dummy1);
+		
+	});
+
+
+
+
+
+
+
+});

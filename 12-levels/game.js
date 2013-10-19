@@ -5,7 +5,8 @@ var sprites = {
     enemy_bee: { sx: 79, sy: 0, w: 37, h: 43, frames: 1 },
     enemy_ship: { sx: 116, sy: 0, w: 42, h: 43, frames: 1 },
     enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
-    explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 }
+    explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
+    fireball: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 }
 };
 
 var enemies = {
@@ -66,6 +67,8 @@ var startGame = function() {
 // override que substituyen a los de la plantilla en enemies para ese
 // enemigo.
 
+
+
 var level1 = [
   //  Comienzo, Fin,   Frecuencia,  Tipo,       Override
     [ 0,        4000,  500,         'step'                 ],
@@ -79,17 +82,19 @@ var level1 = [
 ];
 
 
-
 var playGame = function() {
     var board = new GameBoard();
     board.add(new PlayerShip());
 
+	
     // Se un nuevo nivel al tablero de juego, pasando la definición de
     // nivel level1 y la función callback a la que llamar si se ha
     // ganado el juego
     board.add(new Level(level1, winGame));
     Game.setBoard(3,board);
+    
 };
+
 
 // Llamada cuando han desaparecido todos los enemigos del nivel sin
 // que alcancen a la nave del jugador
@@ -185,6 +190,9 @@ var Starfield = function(speed,opacity,numStars,clear) {
 // La clase PlayerShip tambien ofrece la interfaz step(), draw() para
 // poder ser dibujada desde el bucle principal del juego
 var PlayerShip = function() { 
+	 var up = false;
+	 var up2 = false;
+	 var up3 = false;
     this.setup('ship', { vx: 0, reloadTime: 0.25, maxVel: 200 });
 
     this.reload = this.reloadTime;
@@ -200,18 +208,43 @@ var PlayerShip = function() {
 
 	if(this.x < 0) { this.x = 0; }
 	else if(this.x > Game.width - this.w) { 
-	    this.x = Game.width - this.w;
+	    this.x = Game.width - this.w 
 	}
 
 	this.reload-=dt;
-	if(Game.keys['fire'] && this.reload < 0) {
+	if(!Game.keys['fire']) up = true;
+	if(!Game.keys['leftFireBall']) up2 = true;
+	if(!Game.keys['rightFireBall']) up3 = true;
+	if(up && Game.keys['fire'] && this.reload < 0) {
+		 up = false;
 	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
-	    Game.keys['fire'] = false;
+	    //Game.keys['fire'] = false;
+	    
 	    this.reload = this.reloadTime;
 
 	    // Se añaden al gameboard 2 misiles 
 	    this.board.add(new PlayerMissile(this.x,this.y+this.h/2));
 	    this.board.add(new PlayerMissile(this.x+this.w,this.y+this.h/2));
+	}
+	if(up2 && Game.keys['leftFireBall'] && this.reload < 0) {
+		 up2 = false;
+	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+	    //Game.keys['leftFireball'] = false;
+	    
+	    this.reload = this.reloadTime;
+
+	    // Se añaden al gameboard 2 misiles 
+	    this.board.add(new FireBall(this.x + this.w/2,this.y+this.h/2,1));
+	}
+	if(up3 && Game.keys['rightFireBall'] && this.reload < 0) {
+		 up3 = false;
+	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+	    //Game.keys['leftFireball'] = false;
+	    
+	    this.reload = this.reloadTime;
+
+	    // Se añaden al gameboard 2 misiles 
+	    this.board.add(new FireBall(this.x + this.w/2,this.y+this.h/2,-1));
 	}
     };
 };
@@ -223,7 +256,7 @@ PlayerShip.prototype.type = OBJECT_PLAYER;
 // Llamada cuando una nave enemiga colisiona con la nave del usuario
 PlayerShip.prototype.hit = function(damage) {
     if(this.board.remove(this)) {
-	loseGame();
+    loseGame();
     }
 };
 
@@ -249,6 +282,35 @@ PlayerMissile.prototype.step = function(dt)  {
 	this.board.remove(this);
     } else if(this.y < -this.h) { 
 	this.board.remove(this); 
+    }
+};
+
+
+// lado debe ser 1 si se pulsa B y -1 si se pulsa N
+var FireBall = function (x,y, lado){
+	this.setup('fireball', {vx: -100*lado, vy: -850, damage: 100,frame:3})
+	this.x = x - this.w/2; 
+   this.y = y - this.h; 
+
+};
+
+FireBall.prototype = new Sprite();
+FireBall.prototype.type = OBJECT_PLAYER_PROJECTILE;
+
+FireBall.prototype.step = function(dt)  {
+	 this.x += this.vx * dt;
+	 this.y += this.vy * dt;
+	 this.vy += 50;
+	 
+	 var collision = this.board.collide(this,OBJECT_ENEMY);
+    if(collision) {
+	collision.hit(this.damage);
+	
+    } else if(this.y > Game.height || 
+       this.y < -this.h||
+       this.x < -this.w||
+       this.x > Game.width) {
+	this.board.remove(this);
     }
 };
 
@@ -328,6 +390,8 @@ Enemy.prototype.step = function(dt) {
     var collision = this.board.collide(this,OBJECT_PLAYER);
     if(collision) {
 	collision.hit(this.damage);
+	this.board.add(new Explosion(this.x + this.w/2, 
+                                     this.y + this.h/2));
 	this.board.remove(this);
     }
 
