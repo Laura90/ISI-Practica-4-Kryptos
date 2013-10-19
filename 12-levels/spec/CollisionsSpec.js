@@ -105,9 +105,10 @@ describe("collisionSpec",function(){
 		newboard.step(0.01);
 		
 		expect(collision).toBe(enemigo);
-		expect(newboard.objects.length).toBe(1);
+		expect(newboard.objects.length).toBe(2);
 		expect(newboard.objects[0].sprite).toBe('explosion');
-		
+		expect(newboard.objects[1].sprite).toBe('explosion');
+	
 	});
 	
 
