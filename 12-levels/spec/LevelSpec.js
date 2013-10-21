@@ -94,6 +94,15 @@ describe("LevelSpec", function() {
 
         });
         
+        it("levelConstructor()", function(){
+        	var nivel = new Level(LevelPrueba, callback);
+        	expect(nivel.callback).toBe(callback);
+        	expect(nivel.levelData.length).toBe(LevelPrueba.length);
+        	expect(nivel).toBeDefined();
+        });
+        
+        
+        
 });
 
 
