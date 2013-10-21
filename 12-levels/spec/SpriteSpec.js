@@ -1,6 +1,9 @@
 
 describe("class Sprite", function(){
 	
+		var canvas, ctx;
+		var SpriteSheetOrig, GameOrig;
+		
 		beforeEach(function(){
 
 			loadFixtures('index.html');
@@ -11,18 +14,19 @@ describe("class Sprite", function(){
 			ctx = canvas.getContext('2d');
 
 			expect(ctx).toBeDefined();
+			SpriteSheetOrig = SpriteSheet;
+            GameOrig = Game;
 			
 		SpriteSheet = {
 				draw : function () {},
 				map : {fireball: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 }}
 			}
-			
-	
-
-		
 		});
 
-
+		afterEach(function() {
+                SpriteSheet = SpriteSheetOrig;
+                Game = GameOrig;
+    	});
 
 	it("Sprite.draw()",function(){
 	

@@ -1,5 +1,8 @@
 describe("collisionSpec",function(){
 
+	var SpriteSheetOrig, GameOrig;
+	var canvas, ctx;
+	
 	beforeEach(function(){
 	
 			loadFixtures('index.html');
@@ -10,6 +13,9 @@ describe("collisionSpec",function(){
 			ctx = canvas.getContext('2d');
 			expect(ctx).toBeDefined();
 			
+			SpriteSheetOrig = SpriteSheet;
+            GameOrig = Game;
+            
 			SpriteSheet = {
 				draw : function () {},
 				map : {
@@ -22,6 +28,11 @@ describe("collisionSpec",function(){
 			}	
 			newboard = new GameBoard();
 	});
+	
+	afterEach(function() {
+                SpriteSheet = SpriteSheetOrig;
+                Game = GameOrig;
+    });
 	
 	it("Misil vs Enemy",function(){
 			

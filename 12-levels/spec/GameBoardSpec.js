@@ -44,6 +44,7 @@ Especificación: GameBoard debe
 describe("Clase GameBoard", function(){
 
 	var canvas, ctx;
+	var SpriteSheetOrig, GameOrig;
 	
 	beforeEach(function(){
 		loadFixtures('index.html');
@@ -55,7 +56,14 @@ describe("Clase GameBoard", function(){
 		expect(ctx).toBeDefined();
 		
 		newboard = new GameBoard();
+		SpriteSheetOrig = SpriteSheet;
+        GameOrig = Game;
 	});
+	
+	afterEach(function() {
+                SpriteSheet = SpriteSheetOrig;
+                Game = GameOrig;
+    });
 
 
 

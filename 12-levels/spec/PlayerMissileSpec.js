@@ -31,6 +31,7 @@
 describe("Clase PlayerMissile", function(){
 
 	var canvas, ctx;
+	var SpriteSheetOrig, GameOrig;
 	
 	beforeEach(function(){
 		loadFixtures('index.html');
@@ -40,16 +41,24 @@ describe("Clase PlayerMissile", function(){
 
 		ctx = canvas.getContext('2d');
 		expect(ctx).toBeDefined();
+		SpriteSheetOrig = SpriteSheet;
+        GameOrig = Game;
+        
+        SpriteSheet = {
+			draw : function () {},
+			map : {missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 }}
+		}
 	});
 	
+	afterEach(function() {
+                SpriteSheet = SpriteSheetOrig;
+                Game = GameOrig;
+    });
 	
 
 	it("PlayerMissile.draw()", function(){
 	
-		SpriteSheet = {
-			draw : function () {},
-			map : {missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 }}
-		}
+		
 		m = new PlayerMissile(10,10);
 		
 		spyOn(SpriteSheet, "draw");

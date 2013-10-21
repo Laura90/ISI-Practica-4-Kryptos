@@ -1,6 +1,8 @@
 describe("LevelSpec", function() {
-        var canvas; 
-        var ctx;
+        
+		var canvas, ctx;
+		var SpriteSheetOrig, GameOrig;
+		var callback = function() {};
         
         var LevelPrueba = [
          // Comienzo, Fin, Frecuencia, Tipo, Override
@@ -14,27 +16,47 @@ describe("LevelSpec", function() {
                 [ 22000, 25000, 400, 'wiggle', { x: 100 } ]
         ];
         
-        var callback = function() {};
-       
+		beforeEach(function(){
+			loadFixtures('index.html');
+		
+			canvas = $('#game')[0];
+			expect(canvas).toExist();
+
+			ctx = canvas.getContext('2d');
+			expect(ctx).toBeDefined();
+			SpriteSheetOrig = SpriteSheet;
+            GameOrig = Game;
+            /*
+			SpriteSheet = {
+				map : {enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 }}
+			}
+			*/
+		});
+		
+		afterEach(function() {
+                SpriteSheet = SpriteSheetOrig;
+                Game = GameOrig;
+        });
+        
         it("level.step()", function() {
 
-                SpriteSheet.map = {
-                                ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
-                                missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 },
-                                enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
-                                enemy_bee: { sx: 79, sy: 0, w: 37, h: 43, frames: 1 },
-                                enemy_ship: { sx: 116, sy: 0, w: 42, h: 43, frames: 1 },
-                                enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
-                                explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
-                                fireball: { sx: 0, sy: 64, w: 64, h: 64, frames: 1 }
-                };
+			SpriteSheet.map = {
+                     ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
+                     missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 },
+                     enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
+                     enemy_bee: { sx: 79, sy: 0, w: 37, h: 43, frames: 1 },
+                     enemy_ship: { sx: 116, sy: 0, w: 42, h: 43, frames: 1 },
+                     enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
+                     explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
+	                 fireball: { sx: 0, sy: 64, w: 64, h: 64, frames: 1 }
+              };
 
-                var nivel = new Level(LevelPrueba, callback);
-                var gameboard = new GameBoard();
-                gameboard.add(nivel);
-                var dt = 1;
-                spyOn(nivel.board, "add");
-                spyOn(nivel, "callback");
+             var nivel = new Level(LevelPrueba, callback);
+             var gameboard = new GameBoard();
+             gameboard.add(nivel);
+             var dt = 1;
+             spyOn(nivel.board, "add");
+             spyOn(nivel, "callback");
             
                                 
                 /*- si ha llegado ya el momento de añadir nuevos sprites de alguna
@@ -47,36 +69,32 @@ describe("LevelSpec", function() {
       - si hay que terminar porque no quedan baterías de enemigos en
         el nivel ni enemigos en el tablero de juegos.*/
                 
-                nivel.step(dt);
-                expect(nivel.t).toBe(dt*1000);
-                expect(nivel.callback).not.toHaveBeenCalled();
+			nivel.step(dt);
+			expect(nivel.t).toBe(dt*1000);
+			expect(nivel.callback).not.toHaveBeenCalled();
 
-                nivel.board.add.reset();
-                nivel.t = 3500;
-                nivel.step(dt);            
-                expect(nivel.t).toBe(3500 + dt*1000);
-                expect(nivel.levelData.length).toBe(LevelPrueba.length-1);
-                expect(nivel.callback).not.toHaveBeenCalled();
+			nivel.board.add.reset();
+			nivel.t = 3500;
+			nivel.step(dt);            
+			expect(nivel.t).toBe(3500 + dt*1000);
+			expect(nivel.levelData.length).toBe(LevelPrueba.length-1);
+			expect(nivel.callback).not.toHaveBeenCalled();
 
-                nivel.board.add.reset();
-                nivel.t = 11000;
-                nivel.step(dt);
-                expect(nivel.t).toBe(11000 + dt*1000);
-                expect(nivel.levelData.length).toBe(LevelPrueba.length-1);
-                expect(nivel.callback).not.toHaveBeenCalled();
+			nivel.board.add.reset();
+			nivel.t = 11000;
+			nivel.step(dt);
+			expect(nivel.t).toBe(11000 + dt*1000);
+			expect(nivel.levelData.length).toBe(LevelPrueba.length-1);
+			expect(nivel.callback).not.toHaveBeenCalled();
                 
-                nivel.t = 26000;
-                nivel.board.cnt[OBJECT_ENEMY] = 0;
-                nivel.step(dt);
-                expect(nivel.callback).toHaveBeenCalled();
+            nivel.t = 26000;
+        	nivel.board.cnt[OBJECT_ENEMY] = 0;
+			nivel.step(dt);
+			expect(nivel.callback).toHaveBeenCalled();
 
         });
+        
 });
-
-
-
-
-
 
 
 

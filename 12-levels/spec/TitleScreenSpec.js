@@ -9,18 +9,23 @@ describe("Clase TitleScreen", function(){
 
 
     var canvas, ctx;
-
+	var SpriteSheetOrig, GameOrig;
     beforeEach(function(){
-	loadFixtures('index.html');
+		loadFixtures('index.html');
 
-	canvas = $('#game')[0];
-	expect(canvas).toExist();
+		canvas = $('#game')[0];
+		expect(canvas).toExist();
 
-	ctx = canvas.getContext('2d');
-	expect(ctx).toBeDefined();
+		ctx = canvas.getContext('2d');
+		expect(ctx).toBeDefined();
+		SpriteSheetOrig = SpriteSheet;
+        GameOrig = Game;
+	});
 
+	afterEach(function() {
+		SpriteSheet = SpriteSheetOrig;
+        Game = GameOrig;
     });
-
 
     it("draw", function(){
 	spyOn(ctx, "fillText");

@@ -13,6 +13,7 @@ describe("Game singleton", function(){
     var canvas, ctx;
 
     var sprites, startGame;
+    var SpriteSheetOrig, GameOrig;
 
     beforeEach(function(){
 	loadFixtures('index.html');
@@ -30,7 +31,15 @@ describe("Game singleton", function(){
 	    SpriteSheet.draw(Game.ctx,"enemy_ship",150,150);
 	    SpriteSheet.draw(Game.ctx,"enemy_circle",150,200);
 	}
+		SpriteSheetOrig = SpriteSheet;
+        GameOrig = Game;
+	});
+	
+	afterEach(function() {
+		SpriteSheet = SpriteSheetOrig;
+        Game = GameOrig;
     });
+    
 
 
 

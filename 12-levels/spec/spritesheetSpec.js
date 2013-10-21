@@ -32,6 +32,13 @@ describe("Codigo que manipula el canvas en game.js", function(){
 
 	ctx = canvas.getContext('2d');
 	expect(ctx).toBeDefined();
+	SpriteSheetOrig = SpriteSheet;
+    GameOrig = Game;
+    });
+    
+    afterEach(function() {
+                SpriteSheet = SpriteSheetOrig;
+                Game = GameOrig;
     });
 
 });
@@ -57,13 +64,20 @@ describe("Objeto singleton SpriteSheet", function(){
     var canvas, ctx;
 
     beforeEach(function(){
-	loadFixtures('index.html');
+		loadFixtures('index.html');
 
-	canvas = $('#game')[0];
-	expect(canvas).toExist();
+		canvas = $('#game')[0];
+		expect(canvas).toExist();
 
-	ctx = canvas.getContext('2d');
-	expect(ctx).toBeDefined();
+		ctx = canvas.getContext('2d');
+		expect(ctx).toBeDefined();
+		SpriteSheetOrig = SpriteSheet;
+    	GameOrig = Game;
+    });
+    
+    afterEach(function() {
+                SpriteSheet = SpriteSheetOrig;
+                Game = GameOrig;
     });
 
 

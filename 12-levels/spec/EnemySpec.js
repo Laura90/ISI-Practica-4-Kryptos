@@ -62,7 +62,10 @@
 */
 
 	describe("Clase Enemy", function(){
-	
+		
+		var canvas, ctx;
+		var SpriteSheetOrig, GameOrig;
+		
 		beforeEach(function(){
 			loadFixtures('index.html');
 		
@@ -71,13 +74,20 @@
 
 			ctx = canvas.getContext('2d');
 			expect(ctx).toBeDefined();
-			
+			SpriteSheetOrig = SpriteSheet;
+            GameOrig = Game;
+            
 			SpriteSheet = {
 				draw : function () {},
 				map : {enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 }}
 			}
 			
 		});
+		
+		afterEach(function() {
+                SpriteSheet = SpriteSheetOrig;
+                Game = GameOrig;
+        });
 	
 	
 		it("Enemy.draw()", function(){
